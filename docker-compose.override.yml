@@ -1,0 +1,120 @@
+services:
+  posts.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5002
+      - ASPNETCORE_HTTPS_PORTS=7002
+    ports:
+      - "5002"
+      - "7002"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  comments.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5003
+      - ASPNETCORE_HTTPS_PORTS=7003
+    ports:
+      - "5003"
+      - "7003"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  notification.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5007
+      - ASPNETCORE_HTTPS_PORTS=7007
+    ports:
+      - "5007"
+      - "7007"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  votes.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5006
+      - ASPNETCORE_HTTPS_PORTS=7006
+    ports:
+      - "5006"
+      - "7006"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  users.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5005
+      - ASPNETCORE_HTTPS_PORTS=7005
+    ports:
+      - "5005"
+      - "7005"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  gateway.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=7000
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/gateway.api.pfx
+    ports:
+      - "5000"
+      - "7000"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${USERPROFILE}/.aspnet/https:/https:ro
+    depends_on:
+      - posts.api
+      - auth.api
+      - images.api
+      - comments.api
+
+      
+
+  auth.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5001
+      - ASPNETCORE_HTTPS_PORTS=7001
+    ports:
+      - "5001"
+      - "7001"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  images.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5004
+      - ASPNETCORE_HTTPS_PORTS=7004
+    ports: 
+      - "5004"
+      - "7004"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: database
+    environment:
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+        - "1433:1433"
+    volumes: 
+      - database:/var/opt/mssql
+
+volumes: 
+    database: 

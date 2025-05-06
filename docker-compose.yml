@@ -1,0 +1,106 @@
+services:
+  posts.api:
+    image: ${DOCKER_REGISTRY-}postsapi
+    container_name: posts.api
+    build:
+      context: .
+      dockerfile: Posts.Api/Dockerfile
+    ports:
+      - "5002:5002"
+      - "7002:7002"
+
+  comments.api:
+    image: ${DOCKER_REGISTRY-}commentsapi
+    container_name: comments.api
+    build:
+      context: .
+      dockerfile: Comments.Api/Dockerfile
+    ports:
+      - "5003:5003"
+      - "7003:7003"
+  
+  notification.api:
+    image: ${DOCKER_REGISTRY-}notificationapi
+    container_name: notification.api
+    build:
+      context: .
+      dockerfile: Notification.Api/Dockerfile
+    ports:
+      - "5007:5007"
+      - "7007:7007"
+
+  votes.api:
+    image: ${DOCKER_REGISTRY-}votesapi
+    container_name: votes.api
+    build:
+      context: .
+      dockerfile: Votes.Api/Dockerfile
+    ports:
+      - "5006:5006"
+      - "7006:7006"
+
+  users.api:
+    image: ${DOCKER_REGISTRY-}usersapi
+    container_name: users.api
+    build:
+      context: .
+      dockerfile: Users.Api/Dockerfile
+    ports:
+      - "5005:5005"
+      - "7005:7005"
+
+  gateway.api:
+    image: ${DOCKER_REGISTRY-}gatewayapi
+    container_name: gateway.api
+    build:
+      context: .
+      dockerfile: Gateway.Api/Dockerfile
+    ports:
+      - "5000:5000"
+      - "7000:7000"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/gateway.api.pfx
+    volumes: 
+      - ${USERPROFILE}/.aspnet/https:/https:ro
+    depends_on:
+      - posts.api
+      - auth.api
+      - images.api
+      - comments.api
+
+
+  auth.api:
+    image: ${DOCKER_REGISTRY-}authapi
+    container_name: auth.api
+    build:
+      context: .
+      dockerfile: Auth.Api/Dockerfile
+    ports:
+      - "5001:5001"
+      - "7001:7001"
+
+  images.api:
+    image: ${DOCKER_REGISTRY-}imagesapi
+    container_name: images.api
+    build:
+      context: .
+      dockerfile: Images.Api/Dockerfile
+    ports:
+      - "5004:5004"
+      - "7004:7004"
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: database
+    environment:
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+        - "1433:1433"
+    volumes: 
+      - database:/var/opt/mssql
+
+volumes: 
+    database: 
+    

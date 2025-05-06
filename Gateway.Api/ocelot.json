@@ -1,0 +1,432 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Posts",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/posts",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Posts/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/posts/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Posts",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/posts",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Tags",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/tags",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Tags/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/tags/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Tags",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/tags",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/Auth/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "auth.api",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/login",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Auth/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "auth.api",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/register",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Images/Upload",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "images.api",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/images",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Images",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "images.api",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/images",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Images/Comment/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "images.api",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/images/Comment/{id}",
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Images/Post/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "images.api",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/images/Post/{id}",
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Comments",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "comments.api",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/comments",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Comments/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "comments.api",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/comments/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Comments",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "comments.api",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/comments",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Comments/Post/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "comments.api",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/comments/post/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Notification/send-notification",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notification.api",
+          "Port": 5007
+        }
+      ],
+      "UpstreamPathTemplate": "/Notification/send-notification",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Notification/send-sms",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notification.api",
+          "Port": 5007
+        }
+      ],
+      "UpstreamPathTemplate": "/Notification/send-sms",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Notification/send-email",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notification.api",
+          "Port": 5007
+        }
+      ],
+      "UpstreamPathTemplate": "/Notification/send-email",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/users",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Users/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/users/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Users/ban",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/users/ban",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Users/Score",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/users/score",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Users/unban/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/users/unban/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Votes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "votes.api",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/votes",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Votes/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "votes.api",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/votes/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Votes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "votes.api",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/votes",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Votes/Post/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "votes.api",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/votes/post/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Votes/Comment/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "votes.api",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/votes/comments/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7000"
+  }
+}
+
+//{
+//  "Routes": [
+//    {
+//      "DownstreamPathTemplate": "/api/Posts",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "posts.api",
+//          "Port": 7002
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/posts",
+//      "UpstreamHttpMethod": [ "GET" ]
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/Posts/{id}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "posts.api",
+//          "Port": 7002
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/posts/{id}",
+//      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/Posts",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "posts.api",
+//          "Port": 7002
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/posts",
+//      "UpstreamHttpMethod": [ "POST" ],
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "Bearer",
+//        "AllowedScopes": []
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/Auth/login",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "auth.api",
+//          "Port": 7001
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/auth/login",
+//      "UpstreamHttpMethod": [ "POST" ]
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/Auth/register",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "auth.api",
+//          "Port": 7001
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/auth/register",
+//      "UpstreamHttpMethod": [ "POST" ]
+//    }
+//  ],
+//  "GlobalConfiguration": {
+//    "BaseUrl": "https://localhost:7000",
+//    "HttpHandlerOptions": {
+//      "DangerousAcceptAnyServerCertificateValidator": true
+//    }
+//  }
+//}
