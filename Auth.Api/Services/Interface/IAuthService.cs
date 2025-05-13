@@ -6,5 +6,6 @@ namespace Auth.Services.Interface
     {
         Task<LoginResponseDto?> Login(LoginRequestDto loginRequestDto);
         Task<LoginResponseDto?> Register(RegisterRequestDto registerRequestDto);
+        Task<Boolean> CheckBan(string userId);
     }
 }

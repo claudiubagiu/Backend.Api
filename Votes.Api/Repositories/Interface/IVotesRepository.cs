@@ -1,4 +1,5 @@
 ﻿using Votes.Api.Models;
+using Votes.Api.Models.Domain;
 using Votes.Api.Models.DTOs;
 
 namespace Votes.Api.Repositories.Interface
@@ -14,5 +15,7 @@ namespace Votes.Api.Repositories.Interface
         Task<bool> DeleteAllByPostId(Guid postId);
         Task<bool> DeleteAllByCommentId(Guid commentId);
         Task<Vote> GetByUserIdAndTargetIdAsync(string userId, Guid? postId, Guid? commentId);
+        Task<Post> GetPostById(Guid postId);
+        Task<Comment> GetCommentById(Guid commentId);
     }
 }

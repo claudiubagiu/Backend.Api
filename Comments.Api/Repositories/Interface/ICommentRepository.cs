@@ -10,5 +10,6 @@ namespace Comments.Api.Repositories.Interface
         Task<Comment?> GetByIdAsync(Guid id);
         Task<Comment?> DeleteAsync(Guid id);
         Task<Comment?> UpdateAsync(Comment comment);
+        Task ChangePostStatus(Guid postId);
     }
 }

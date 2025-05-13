@@ -104,5 +104,17 @@ namespace Posts.Api.Controllers
                 return Ok(result);
             return NotFound();
         }
+
+        // PUT : api/Posts/Status/{id}
+        [HttpPut]
+        [Authorize(Roles = "Admin, User")]
+        [Route("Status/{id}")]
+        public async Task<ActionResult<Boolean>> ChangePostStatus([FromRoute] Guid id)
+        {
+            var result = await postService.ChangePostStatus(id);
+            if (result)
+                return Ok(result);
+            return NotFound();
+        }
     }
 }

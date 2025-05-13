@@ -20,11 +20,12 @@ namespace Auth.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
+            var isUserBanned = await authService.CheckBan(loginRequestDto.Email);
+            if (isUserBanned)
+                return Unauthorized(new { message = "You are banned!" });
             var response = await authService.Login(loginRequestDto);
             if (response != null)
-            {
                 return Ok(response);
-            }
             return Unauthorized();
         }
 

@@ -223,5 +223,21 @@ namespace Votes.Api.Services.Implementation
                 return null;
             return mapper.Map<VoteDto>(vote);
         }
+        public async Task<bool> CheckUserVoteAsync(string userId, Guid? postId, Guid? commentId)
+        {
+            if (postId != null)
+            {
+                var post = await votesRepository.GetPostById((Guid)postId);
+                if (post.UserId == userId)
+                    return false;
+            }
+            if (commentId != null)
+            {
+                var comment = await votesRepository.GetCommentById((Guid)commentId);
+                if (comment.UserId == userId)
+                    return false;
+            }
+            return true;
+        }
     }
 }

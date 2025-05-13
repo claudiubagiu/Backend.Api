@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Votes.Api.Data;
 using Votes.Api.Models;
-using Votes.Api.Models.DTOs;
+using Votes.Api.Models.Domain;
 using Votes.Api.Repositories.Interface;
 
 namespace Votes.Api.Repositories.Implementation
@@ -85,6 +85,21 @@ namespace Votes.Api.Repositories.Implementation
             if (vote == null)
                 return null;
             return vote;
+        }
+        public async Task<Post> GetPostById(Guid postId)
+        {
+            var post = await dbContext.Post.FirstOrDefaultAsync(p => p.Id == postId);
+            if (post == null)
+                return null;
+            return post;
+        }
+
+        public async Task<Comment> GetCommentById(Guid commentId)
+        {
+            var comment = await dbContext.Comment.FirstOrDefaultAsync(c => c.Id == commentId);
+            if (comment == null)
+                return null;
+            return comment;
         }
     }
 }

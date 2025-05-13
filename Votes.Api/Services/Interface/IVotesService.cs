@@ -14,5 +14,6 @@ namespace Votes.Api.Services.Interface
         Task<bool> DeleteAllByPostIdAsync(Guid postId);
         Task<bool> DeleteAllByCommentIdAsync(Guid commentId);
         Task<VoteDto> GetByUserIdAndTargetIdAsync(string userId, Guid? postId, Guid? commentId);
+        Task<bool> CheckUserVoteAsync(string userId, Guid? postId, Guid? commentId);
     }
 }

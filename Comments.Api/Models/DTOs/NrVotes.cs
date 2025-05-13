@@ -1,4 +1,4 @@
-﻿namespace Posts.Api.Models.DTOs
+﻿namespace Comments.Api.Models.DTOs
 {
     public class NrVotes
     {

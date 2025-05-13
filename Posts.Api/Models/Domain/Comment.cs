@@ -1,4 +1,4 @@
-﻿namespace Votes.Api.Models.Domain
+﻿namespace Posts.Api.Models.Domain
 {
     public class Comment
     {
@@ -9,7 +9,6 @@
         public required Guid PostId { get; set; }
         public Guid? CommentId { get; set; }
         public ICollection<Comment> ChildrenComments { get; set; } = new List<Comment>();
-        public ApplicationUser User { get; set; }
 
     }
 }

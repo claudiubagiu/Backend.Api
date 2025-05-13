@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using Votes.Api.Models;
+using Votes.Api.Models.Domain;
 
 namespace Votes.Api.Data
 {
@@ -12,6 +13,8 @@ namespace Votes.Api.Data
         {
         }
         public DbSet<Vote> Vote { get; set; }
+        public DbSet<Post> Post { get; set; }
+        public DbSet<Comment> Comment { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

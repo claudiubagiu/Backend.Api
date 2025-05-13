@@ -6,7 +6,6 @@ namespace Posts.Api.Models.DTOs
     {
         public required string Title { get; set; }
         public required string Description { get; set; }
-        public required Status Status { get; set; }
         public List<string> TagsName { get; set; } = new List<string>();
     }
 }

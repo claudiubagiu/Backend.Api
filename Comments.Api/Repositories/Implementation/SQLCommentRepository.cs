@@ -2,6 +2,7 @@
 using Comments.Api.Models.Domain;
 using Comments.Api.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using Posts.Api.Models.Domain;
 
 namespace Comments.Api.Repositories.Implementation
 {
@@ -33,7 +34,12 @@ namespace Comments.Api.Repositories.Implementation
 
         public async Task<List<Comment>> GetAllAsync()
         {
-            return await dbContext.Comment.Include("ChildrenComments").Where(c => c.CommentId == null).ToListAsync();
+            return await dbContext.Comment
+                .Include(c => c.Votes)
+                .Include(c => c.User)
+                .Include(c => c.Image)
+                .Include("ChildrenComments")
+                .ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(Guid id)
@@ -57,6 +63,17 @@ namespace Comments.Api.Repositories.Implementation
         public async Task<List<Comment>> GetAllByPostIdAsync(Guid postId)
         {
             return await dbContext.Comment.Include("ChildrenComments").Where(c => c.PostId == postId && c.CommentId == null).ToListAsync();
+        }
+
+        public async Task ChangePostStatus(Guid postId)
+        {
+            Post post = await dbContext.Post.FirstOrDefaultAsync(p => p.Id == postId);
+            if (post.Status == Status.Received)
+            {
+                // change status to 1
+                post.Status = Status.InProgress;
+                await dbContext.SaveChangesAsync();
+            }
         }
     }
 }

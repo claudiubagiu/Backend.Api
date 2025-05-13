@@ -25,6 +25,7 @@ namespace Comments.Api.Services.Implementation
             comment.CreatedAt = dateTime;
             comment.UserId = userId;
             comment = await commentRepository.CreateAsync(comment);
+            await commentRepository.ChangePostStatus(comment.PostId);
 
             if (comment != null)
                 return mapper.Map<CommentDto>(comment);
@@ -37,9 +38,6 @@ namespace Comments.Api.Services.Implementation
 
             if (comment == null)
                 return false;
-
-            //var client = httpClientFactory.CreateClient();
-            //var response = await client.DeleteAsync($"http://images.api:5004/api/Images/Comment/{id}");
 
             var client = httpClientFactory.CreateClient();
             var response = await client.DeleteAsync($"http://votes.api:5006/api/Votes/Comment/{id}");
@@ -71,6 +69,7 @@ namespace Comments.Api.Services.Implementation
         {
             var comments = await commentRepository.GetAllAsync();
             var commentsDto = mapper.Map<List<CommentDto>>(comments);
+            commentsDto = commentsDto.OrderByDescending(c => c.NrVotes.Likes - c.NrVotes.Dislikes).Where(c => c.CommentId == null).ToList();
             await GetImagesAsync(commentsDto);
 
             if (commentsDto != null)

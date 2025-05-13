@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Votes.Api.Models.DTOs;
 using Votes.Api.Services.Interface;
@@ -67,10 +68,13 @@ namespace Votes.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Vote([FromBody] VoteRequest voteRequest)
         {
             var existingVote = await votesService.GetByUserIdAndTargetIdAsync(voteRequest.UserId, voteRequest.PostId, voteRequest.CommentId);
-
+            bool validVote = await votesService.CheckUserVoteAsync(voteRequest.UserId, voteRequest.PostId, voteRequest.CommentId);
+            if (!validVote)
+                return BadRequest("Invalid vote request.");
             if (existingVote == null)
             {
                 var result = await votesService.CreateAsync(voteRequest);

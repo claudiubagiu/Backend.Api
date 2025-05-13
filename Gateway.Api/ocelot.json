@@ -25,6 +25,18 @@
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     },
     {
+      "DownstreamPathTemplate": "/api/Posts/Status/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "posts.api",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/posts/Status/{id}",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Posts",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

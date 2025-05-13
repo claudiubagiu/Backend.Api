@@ -26,16 +26,6 @@ namespace Auth.Services.Implementation
 
         public async Task<LoginResponseDto?> Login([FromBody] LoginRequestDto loginRequestDto)
         {
-            var client = httpClientFactory.CreateClient();
-            var responseBan = await client.GetAsync($"http://users.api:5005/api/Users/isBanned/{loginRequestDto.Email}");
-            if (responseBan.IsSuccessStatusCode)
-            {
-                var content = await responseBan.Content.ReadAsStringAsync();
-                if (content == "true")
-                {
-                    return null;
-                }
-            }
             var user = await userManager.FindByEmailAsync(loginRequestDto.Email);
             if (user != null)
             {
@@ -76,6 +66,21 @@ namespace Auth.Services.Implementation
 
             }
             return null;
+        }
+
+        public async Task<Boolean> CheckBan(string Email)
+        {
+            var client = httpClientFactory.CreateClient();
+            var responseBan = await client.GetAsync($"http://users.api:5005/api/Users/isBanned/{Email}");
+            if (responseBan.IsSuccessStatusCode)
+            {
+                var content = await responseBan.Content.ReadAsStringAsync();
+                if (content == "true")
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

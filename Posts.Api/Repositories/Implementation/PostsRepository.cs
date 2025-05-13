@@ -16,7 +16,15 @@ namespace Posts.Api.Repositories.Implementation
 
         public async Task<List<Post>> GetAllAsync()
         {
-            return await dbContext.Post.Include(p => p.Tags).ToListAsync();
+            return await dbContext.Post
+                .OrderByDescending(p => p.CreatedAt)
+                .Include(p => p.Tags)
+                .Include(p => p.Image)
+                .Include(p => p.Comments)
+                .Include(p => p.User)
+                .Include(p => p.Votes)
+                    .ThenInclude(v => v.User)
+                .ToListAsync();
         }
 
         public async Task<Post> CreateAsync(Post post)
@@ -41,7 +49,14 @@ namespace Posts.Api.Repositories.Implementation
 
         public async Task<Post?> GetByIdAsync(Guid id)
         {
-            return await dbContext.Post.FirstOrDefaultAsync(p => p.Id == id);
+            return await dbContext.Post
+                .Include(p => p.Tags)
+                .Include(p => p.Image)
+                .Include(p => p.Comments)
+                .Include(p => p.User)
+                .Include(p => p.Votes)
+                    .ThenInclude(v => v.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Post?> UpdateAsync(Post post)

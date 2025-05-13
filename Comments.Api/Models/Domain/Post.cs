@@ -21,10 +21,5 @@ namespace Posts.Api.Models.Domain
         public required DateTime CreatedAt { get; set; }
         public required Status Status { get; set; } = 0;
         public required string UserId { get; set; }
-        public List<Tag> Tags { get; set; } = new List<Tag>();
-        public List<Comment> Comments { get; set; } = new List<Comment>();
-        public List<Vote> Votes { get; set; } = new List<Vote>();
-        public ApplicationUser User { get; set; }
-        public Image? Image { get; set; }
     }
 }
