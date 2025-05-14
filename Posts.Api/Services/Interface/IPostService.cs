@@ -10,5 +10,6 @@ namespace Posts.Api.Services.Interface
         Task<PostDto?> UpdateAsync(Guid id, UpdatePostRequestDto updatePostRequestDto, string userId, List<String> userRoleClaims);
         Task<Boolean> DeleteAsync(Guid id, string userId, List<String> userRoleClaims);
         Task<Boolean> ChangePostStatus(Guid id);
+        Task<List<PostDto>?> FilterQuestionsAsync(PostsFilterDto filters, string? currentUserId);
     }
 }

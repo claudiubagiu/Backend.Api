@@ -120,5 +120,33 @@ namespace Posts.Api.Services.Implementation
             await postRepository.UpdateAsync(post);
             return true;
         }
+
+        public async Task<List<PostDto>> FilterQuestionsAsync(PostsFilterDto filters, string? currentUserId)
+        {
+            var posts = await postRepository.GetAllAsync();
+            var query = posts.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filters.Tag))
+            {
+                query = query.Where(q => q.Tags.Any(t => t.Name == filters.Tag));
+            }
+
+            if (!string.IsNullOrEmpty(filters.SearchText))
+            {
+                query = query.Where(q => q.Title.Contains(filters.SearchText));
+            }
+
+            if (!string.IsNullOrEmpty(filters.UserId))
+            {
+                query = query.Where(q => q.UserId == filters.UserId);
+            }
+
+            if (filters.OnlyOwnQuestions && !string.IsNullOrEmpty(currentUserId))
+            {
+                query = query.Where(q => q.UserId == currentUserId);
+            }
+            var postsDto = mapper.Map<List<PostDto>>(query.ToList());
+            return postsDto;
+        }
     }
 }

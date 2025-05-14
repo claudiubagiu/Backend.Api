@@ -116,5 +116,14 @@ namespace Posts.Api.Controllers
                 return Ok(result);
             return NotFound();
         }
+
+        // GET : api/Posts/Filter?tag=TAG_NAME&searchText=TEXT_NAME&onlyOwnQuestions=BOOLEAN
+        [HttpGet("filter")]
+        public async Task<IActionResult> FilterQuestions([FromQuery] PostsFilterDto filters)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await postService.FilterQuestionsAsync(filters, userId);
+            return Ok(result);
+        }
     }
 }
