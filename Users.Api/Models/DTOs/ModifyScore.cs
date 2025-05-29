@@ -3,6 +3,6 @@
     public class ModifyScore
     {
         public string UserId { get; set; }
-        public int Score { get; set; }
+        public float Score { get; set; }
     }
 }

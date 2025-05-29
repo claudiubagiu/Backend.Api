@@ -72,8 +72,8 @@ namespace Gateway.Api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                    b.Property<float>("Score")
+                        .HasColumnType("real");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

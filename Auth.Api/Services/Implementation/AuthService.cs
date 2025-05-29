@@ -40,7 +40,8 @@ namespace Auth.Services.Implementation
                         {
                             JwtToken = jwtToken,
                             Email = loginRequestDto.Email,
-                            Roles = roles.ToList()
+                            Roles = roles.ToList(),
+                            UserId = user.Id  
                         };
                         return response;
                     }
@@ -48,6 +49,7 @@ namespace Auth.Services.Implementation
             }
             return null;
         }
+
 
         public async Task<LoginResponseDto?> Register([FromBody] RegisterRequestDto registerRequestDto)
         {

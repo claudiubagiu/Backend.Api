@@ -29,7 +29,17 @@ namespace Posts.Api.Mappings
             CreateMap<Tag, AddTagRequestDto>().ReverseMap();
 
             // Comments
-            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, CommentDto>()
+                .ForMember(dest => dest.FeaturedImageUrl,
+                    opt => opt.MapFrom(src => src.Image != null ? src.Image.FilePath : string.Empty))
+                .ForMember(dest => dest.NrVotes,
+                    opt => opt.MapFrom(src => new NrVotes
+                    {
+                        Likes = src.Votes.Count(v => v.Type == Posts.Api.Models.Type.Like),
+                        Dislikes = src.Votes.Count(v => v.Type == Posts.Api.Models.Type.Dislike)
+                    }))
+                .ReverseMap();
+
 
             // User
             CreateMap<ApplicationUserDto, ApplicationUser>().ReverseMap();

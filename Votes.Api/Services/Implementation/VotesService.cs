@@ -20,66 +20,100 @@ namespace Votes.Api.Services.Implementation
             this.httpClientFactory = httpClientFactory;
         }
 
+        private float GetScoreDelta(Models.Type type, bool isAnswer, bool isVoteRemoval = false)
+        {
+            float delta = 0;
+            if (type == Models.Type.Like)
+                delta = isAnswer ? 5f : 2.5f;
+            else if (type == Models.Type.Dislike)
+                delta = isAnswer ? -2.5f : -1.5f;
+
+            return isVoteRemoval ? -delta : delta;
+        }
+
         public async Task<VoteDto> CreateAsync(VoteRequest voteRequest)
         {
             var vote = mapper.Map<Vote>(voteRequest);
             string targetId;
 
             var client = httpClientFactory.CreateClient();
+            bool isAnswer;
+
             if (vote.CommentId == null)
             {
                 var responsePost = await client.GetAsync($"http://posts.api:5002/api/Posts/{vote.PostId}");
                 var content = await responsePost.Content.ReadFromJsonAsync<Post>();
                 targetId = content.UserId;
+                isAnswer = false;
             }
             else
             {
                 var responseComment = await client.GetAsync($"http://comments.api:5003/api/Comments/{vote.CommentId}");
                 var content = await responseComment.Content.ReadFromJsonAsync<Comment>();
                 targetId = content.UserId;
+                isAnswer = true;
             }
 
-
-            int score = voteRequest.Type == Votes.Api.Models.Type.Like ? 1 : -1;
-            var response = await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+            float score = GetScoreDelta(voteRequest.Type, isAnswer);
+            await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
             {
                 UserId = targetId,
                 Score = score
             });
 
+            // Penalize voter if they downvote someone else's answer
+            if (voteRequest.Type == Models.Type.Dislike && isAnswer && voteRequest.UserId != targetId)
+            {
+                await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+                {
+                    UserId = voteRequest.UserId,
+                    Score = -1.5f
+                });
+            }
+
             vote = await votesRepository.CreateAsync(vote);
-            if (vote == null)
-                return null;
-            return mapper.Map<VoteDto>(vote);
+            return vote == null ? null : mapper.Map<VoteDto>(vote);
         }
 
         public async Task<bool> DeleteAsync(Guid id, VoteRequest voteRequest)
         {
             var client = httpClientFactory.CreateClient();
-            int score = voteRequest.Type == Votes.Api.Models.Type.Like ? -1 : 1;
             string targetId;
+            bool isAnswer;
+
             if (voteRequest.CommentId == null)
             {
                 var responsePost = await client.GetAsync($"http://posts.api:5002/api/Posts/{voteRequest.PostId}");
                 var content = await responsePost.Content.ReadFromJsonAsync<Post>();
                 targetId = content.UserId;
+                isAnswer = false;
             }
             else
             {
                 var responseComment = await client.GetAsync($"http://comments.api:5003/api/Comments/{voteRequest.CommentId}");
                 var content = await responseComment.Content.ReadFromJsonAsync<Comment>();
                 targetId = content.UserId;
+                isAnswer = true;
             }
 
-            var response = await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+            float score = GetScoreDelta(voteRequest.Type, isAnswer, isVoteRemoval: true);
+            await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
             {
                 UserId = targetId,
                 Score = score
             });
-            var result = await votesRepository.DeleteAsync(id);
-            return result;
-        }
 
+            if (voteRequest.Type == Models.Type.Dislike && isAnswer && voteRequest.UserId != targetId)
+            {
+                await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+                {
+                    UserId = voteRequest.UserId,
+                    Score = 1.5f
+                });
+            }
+
+            return await votesRepository.DeleteAsync(id);
+        }
         public async Task<VoteDto> GetByIdAsync(Guid id)
         {
             var vote = await votesRepository.GetById(id);
@@ -87,82 +121,98 @@ namespace Votes.Api.Services.Implementation
                 return null;
             return mapper.Map<VoteDto>(vote);
         }
-
         public async Task<bool> UpdateAsync(Guid id, VoteRequest voteRequest)
         {
             var existingVote = await votesRepository.GetById(id);
-            if (existingVote == null)
-                return false;
+            if (existingVote == null) return false;
 
             var client = httpClientFactory.CreateClient();
-            int score = voteRequest.Type == Votes.Api.Models.Type.Like ? 2 : -2;
             string targetId;
+            bool isAnswer;
+
             if (voteRequest.CommentId == null)
             {
                 var responsePost = await client.GetAsync($"http://posts.api:5002/api/Posts/{voteRequest.PostId}");
                 var content = await responsePost.Content.ReadFromJsonAsync<Post>();
                 targetId = content.UserId;
+                isAnswer = false;
             }
             else
             {
                 var responseComment = await client.GetAsync($"http://comments.api:5003/api/Comments/{voteRequest.CommentId}");
                 var content = await responseComment.Content.ReadFromJsonAsync<Comment>();
                 targetId = content.UserId;
+                isAnswer = true;
             }
 
-            var response = await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+            float undoScore = GetScoreDelta(existingVote.Type, isAnswer, isVoteRemoval: true);
+            float newScore = GetScoreDelta(voteRequest.Type, isAnswer);
+
+            await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
             {
                 UserId = targetId,
-                Score = score
+                Score = undoScore + newScore
             });
 
+            if (isAnswer && voteRequest.UserId != targetId)
+            {
+                float voterAdjustment = 0;
+
+                if (existingVote.Type == Models.Type.Dislike)
+                    voterAdjustment += 1.5f; // undo previous penalty
+
+                if (voteRequest.Type == Models.Type.Dislike)
+                    voterAdjustment -= 1.5f; // apply new penalty
+
+                if (voterAdjustment != 0)
+                {
+                    await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+                    {
+                        UserId = voteRequest.UserId,
+                        Score = voterAdjustment
+                    });
+                }
+            }
             var vote = mapper.Map<Vote>(voteRequest);
             vote.Id = id;
-            var result = await votesRepository.UpdateAsync(vote);
-            return result;
+            return await votesRepository.UpdateAsync(vote);
         }
 
         public async Task<NrVotes> GetAllByPostIdAsync(Guid postId)
         {
             var votes = await votesRepository.GetAllByPostId(postId);
-            if (votes == null)
-                return null;
-            int likes = votes.Count(votes => votes.Type == Votes.Api.Models.Type.Like);
-            int dislikes = votes.Count(votes => votes.Type == Votes.Api.Models.Type.Dislike);
-            var nrVotes = new NrVotes
+            if (votes == null) return null;
+            return new NrVotes
             {
-                Likes = likes,
-                Dislikes = dislikes
+                Likes = votes.Count(v => v.Type == Models.Type.Like),
+                Dislikes = votes.Count(v => v.Type == Models.Type.Dislike)
             };
-            return nrVotes;
         }
 
         public async Task<NrVotes> GetAllByCommentIdAsync(Guid commentId)
         {
             var votes = await votesRepository.GetAllByCommentId(commentId);
-            if (votes == null)
-                return null;
-            int likes = votes.Count(votes => votes.Type == Votes.Api.Models.Type.Like);
-            int dislikes = votes.Count(votes => votes.Type == Votes.Api.Models.Type.Dislike);
-            var nrVotes = new NrVotes
+            if (votes == null) return null;
+            return new NrVotes
             {
-                Likes = likes,
-                Dislikes = dislikes
+                Likes = votes.Count(v => v.Type == Models.Type.Like),
+                Dislikes = votes.Count(v => v.Type == Models.Type.Dislike)
             };
-            return nrVotes;
         }
 
         public async Task<bool> DeleteAllByPostIdAsync(Guid postId)
         {
             var votes = await votesRepository.GetAllByPostId(postId);
-            if (votes == null || votes.Count == 0)
-                return false;
+            if (votes == null || votes.Count == 0) return false;
+
+            var client = httpClientFactory.CreateClient();
             foreach (var vote in votes)
             {
-                var client = httpClientFactory.CreateClient();
-                int score = vote.Type == Votes.Api.Models.Type.Like ? -1 : 1;
+                bool isAnswer = vote.CommentId != null;
+                float score = GetScoreDelta(vote.Type, isAnswer, isVoteRemoval: true);
+
                 string targetId;
-                if (vote.CommentId == null)
+                if (!isAnswer)
                 {
                     var responsePost = await client.GetAsync($"http://posts.api:5002/api/Posts/{vote.PostId}");
                     var content = await responsePost.Content.ReadFromJsonAsync<Post>();
@@ -174,27 +224,30 @@ namespace Votes.Api.Services.Implementation
                     var content = await responseComment.Content.ReadFromJsonAsync<Comment>();
                     targetId = content.UserId;
                 }
-                var response = await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+
+                await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
                 {
                     UserId = targetId,
                     Score = score
                 });
             }
-            var result = await votesRepository.DeleteAllByPostId(postId);
-            return result;
+
+            return await votesRepository.DeleteAllByPostId(postId);
         }
 
         public async Task<bool> DeleteAllByCommentIdAsync(Guid commentId)
         {
             var votes = await votesRepository.GetAllByCommentId(commentId);
-            if (votes == null || votes.Count == 0)
-                return false;
+            if (votes == null || votes.Count == 0) return false;
+
+            var client = httpClientFactory.CreateClient();
             foreach (var vote in votes)
             {
-                var client = httpClientFactory.CreateClient();
-                int score = vote.Type == Votes.Api.Models.Type.Like ? -1 : 1;
+                bool isAnswer = vote.CommentId != null;
+                float score = GetScoreDelta(vote.Type, isAnswer, isVoteRemoval: true);
+
                 string targetId;
-                if (vote.CommentId == null)
+                if (!isAnswer)
                 {
                     var responsePost = await client.GetAsync($"http://posts.api:5002/api/Posts/{vote.PostId}");
                     var content = await responsePost.Content.ReadFromJsonAsync<Post>();
@@ -206,36 +259,34 @@ namespace Votes.Api.Services.Implementation
                     var content = await responseComment.Content.ReadFromJsonAsync<Comment>();
                     targetId = content.UserId;
                 }
-                var response = await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
+
+                await client.PutAsJsonAsync("http://users.api:5005/api/Users/Score", new ModifyScore
                 {
                     UserId = targetId,
                     Score = score
                 });
             }
-            var result = await votesRepository.DeleteAllByCommentId(commentId);
-            return result;
+
+            return await votesRepository.DeleteAllByCommentId(commentId);
         }
 
         public async Task<VoteDto> GetByUserIdAndTargetIdAsync(string userId, Guid? postId, Guid? commentId)
         {
             var vote = await votesRepository.GetByUserIdAndTargetIdAsync(userId, postId, commentId);
-            if (vote == null)
-                return null;
-            return mapper.Map<VoteDto>(vote);
+            return vote == null ? null : mapper.Map<VoteDto>(vote);
         }
+
         public async Task<bool> CheckUserVoteAsync(string userId, Guid? postId, Guid? commentId)
         {
             if (postId != null)
             {
                 var post = await votesRepository.GetPostById((Guid)postId);
-                if (post.UserId == userId)
-                    return false;
+                if (post.UserId == userId) return false;
             }
             if (commentId != null)
             {
                 var comment = await votesRepository.GetCommentById((Guid)commentId);
-                if (comment.UserId == userId)
-                    return false;
+                if (comment.UserId == userId) return false;
             }
             return true;
         }

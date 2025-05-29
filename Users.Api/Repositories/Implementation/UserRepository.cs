@@ -24,7 +24,7 @@ namespace Users.Api.Repositories.Implementation
             return await userManager.Users.Include(u => u.Ban).ToListAsync();
         }
 
-        public async Task<int> ModifyScore(string id, int score)
+        public async Task<float> ModifyScore(string id, float score)
         {
             var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)

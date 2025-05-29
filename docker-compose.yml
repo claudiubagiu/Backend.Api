@@ -8,6 +8,11 @@ services:
     ports:
       - "5002:5002"
       - "7002:7002"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/posts.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
 
   comments.api:
     image: ${DOCKER_REGISTRY-}commentsapi
@@ -18,7 +23,12 @@ services:
     ports:
       - "5003:5003"
       - "7003:7003"
-  
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/comments.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
+
   notification.api:
     image: ${DOCKER_REGISTRY-}notificationapi
     container_name: notification.api
@@ -28,6 +38,11 @@ services:
     ports:
       - "5007:5007"
       - "7007:7007"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/notification.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
 
   votes.api:
     image: ${DOCKER_REGISTRY-}votesapi
@@ -38,6 +53,11 @@ services:
     ports:
       - "5006:5006"
       - "7006:7006"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/votes.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
 
   users.api:
     image: ${DOCKER_REGISTRY-}usersapi
@@ -48,6 +68,11 @@ services:
     ports:
       - "5005:5005"
       - "7005:7005"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/users.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
 
   gateway.api:
     image: ${DOCKER_REGISTRY-}gatewayapi
@@ -61,14 +86,13 @@ services:
     environment:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/gateway.api.pfx
-    volumes: 
+    volumes:
       - ${USERPROFILE}/.aspnet/https:/https:ro
     depends_on:
       - posts.api
       - auth.api
       - images.api
       - comments.api
-
 
   auth.api:
     image: ${DOCKER_REGISTRY-}authapi
@@ -79,6 +103,11 @@ services:
     ports:
       - "5001:5001"
       - "7001:7001"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/auth.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
 
   images.api:
     image: ${DOCKER_REGISTRY-}imagesapi
@@ -89,6 +118,12 @@ services:
     ports:
       - "5004:5004"
       - "7004:7004"
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=18349206
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/images.api.pfx
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
+      - ./Images.Api/Images:/app/Images
 
   database:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -97,10 +132,9 @@ services:
       - SA_PASSWORD=YourStrong@Passw0rd
       - ACCEPT_EULA=Y
     ports:
-        - "1433:1433"
-    volumes: 
+      - "1433:1433"
+    volumes:
       - database:/var/opt/mssql
 
-volumes: 
-    database: 
-    
+volumes:
+  database:

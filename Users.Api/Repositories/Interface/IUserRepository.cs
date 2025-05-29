@@ -6,6 +6,6 @@ namespace Users.Api.Repositories.Interface
     {
         Task<List<ApplicationUser>> GetAllAsync();
         Task<ApplicationUser?> GetByIdAsync(string id);
-        Task<int> ModifyScore(string id, int score);
+        Task<float> ModifyScore(string id, float score);
     }
 }

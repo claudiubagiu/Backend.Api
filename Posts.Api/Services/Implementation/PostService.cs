@@ -141,10 +141,16 @@ namespace Posts.Api.Services.Implementation
                 query = query.Where(q => q.UserId == filters.UserId);
             }
 
+            if (!string.IsNullOrEmpty(filters.UserName))
+            {
+                query = query.Where(q => q.User.UserName == filters.UserName);
+            }
+
             if (filters.OnlyOwnQuestions && !string.IsNullOrEmpty(currentUserId))
             {
                 query = query.Where(q => q.UserId == currentUserId);
             }
+
             var postsDto = mapper.Map<List<PostDto>>(query.ToList());
             return postsDto;
         }

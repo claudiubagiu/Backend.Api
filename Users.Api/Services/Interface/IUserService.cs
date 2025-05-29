@@ -7,6 +7,6 @@ namespace Users.Api.Services.Interface
     {
         Task<List<ApplicationUserDto>> GetAllAsync();
         Task<ApplicationUserDto?> GetByIdAsync(string id);
-        Task<int> ModifyScore(ModifyScore modifyScore);
+        Task<float> ModifyScore(ModifyScore modifyScore);
     }
 }

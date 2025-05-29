@@ -49,10 +49,16 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
+var imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+
+if (!Directory.Exists(imageFolderPath))
+{
+    Directory.CreateDirectory(imageFolderPath);
+}
+
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    FileProvider = new PhysicalFileProvider(imageFolderPath),
     RequestPath = "/Images"
 });
 

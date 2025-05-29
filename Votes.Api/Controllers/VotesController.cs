@@ -98,5 +98,21 @@ namespace Votes.Api.Controllers
                 return Ok(true);
             }
         }
+
+
+        [HttpGet("user-vote")]
+        public async Task<IActionResult> GetUserVote([FromQuery] string userId, [FromQuery] Guid? postId, [FromQuery] Guid? commentId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest("UserId is required.");
+
+            var vote = await votesService.GetByUserIdAndTargetIdAsync(userId, postId, commentId);
+
+            if (vote == null)
+                return Ok(null);
+
+            return Ok(vote);
+        }
+
     }
 }

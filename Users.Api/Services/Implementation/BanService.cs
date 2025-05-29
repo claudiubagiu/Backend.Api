@@ -26,26 +26,39 @@ namespace Users.Api.Services.Implementation
         {
             var ban = mapper.Map<Ban>(addBanRequest);
             var user = await userRepository.GetByIdAsync(ban.UserId);
-            Notification notification = new Notification
+
+            // Try to send notification, but don't stop banning if it fails
+            try
             {
-                Subject = "ConnexUs",
-                Body = addBanRequest.Description,
-                PhoneNumber = user.PhoneNumber,
-                ToEmail = user.Email,
-                Message = addBanRequest.Description
-            };
+                Notification notification = new Notification
+                {
+                    Subject = "ConnexUs",
+                    Body = addBanRequest.Description,
+                    PhoneNumber = user.PhoneNumber,
+                    ToEmail = user.Email,
+                    Message = addBanRequest.Description
+                };
 
-            var client = httpClientFactory.CreateClient();
-            var jsonContent = new StringContent(
-                JsonSerializer.Serialize(notification),
-                Encoding.UTF8,
-                "application/json");
+                var client = httpClientFactory.CreateClient();
+                var jsonContent = new StringContent(
+                    JsonSerializer.Serialize(notification),
+                    Encoding.UTF8,
+                    "application/json");
 
-            var response = await client.PostAsync($"http://notification.api:5007/api/Notification/send-notification", jsonContent);
-            response.EnsureSuccessStatusCode();
+                var response = await client.PostAsync($"http://notification.api:5007/api/Notification/send-notification", jsonContent);
+
+                // Only throw if it's not a 4xx error that we want to tolerate
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                // Log the error, but continue banning
+                Console.WriteLine($"[BanService] Notification failed: {ex.Message}");
+            }
+
+            // Continue with banning the user even if notification failed
             return await banRepository.BanUserAsync(ban);
         }
-
         public async Task<bool> IsUserBannedAsync(string userEmail)
         {
             return await banRepository.IsUserBannedAsync(userEmail);

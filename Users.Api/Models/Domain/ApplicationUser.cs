@@ -6,7 +6,7 @@ namespace Users.Api.Models.Domain
     {
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
-        public int Score { get; set; } = 0;
+        public float Score { get; set; } = 0;
         public Ban? Ban { get; set; }
     }
 }

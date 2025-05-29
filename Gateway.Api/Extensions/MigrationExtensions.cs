@@ -9,10 +9,17 @@ namespace Gateway.Api.Extensions
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            using BackendDbContext dbContext =
-                scope.ServiceProvider.GetRequiredService<BackendDbContext>();
+            var db = scope.ServiceProvider.GetRequiredService<BackendDbContext>();
 
-            dbContext.Database.Migrate();
+            if (!db.Database.CanConnect())
+            {
+                db.Database.Migrate(); // Only migrate if DB is not reachable
+            }
+            else
+            {
+                Console.WriteLine("Database already exists and is reachable. Skipping migration.");
+            }
+            
         }
     }
 }

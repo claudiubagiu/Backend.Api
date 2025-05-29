@@ -9,6 +9,8 @@
         public required Guid PostId { get; set; }
         public Guid? CommentId { get; set; }
         public ICollection<Comment> ChildrenComments { get; set; } = new List<Comment>();
-
+        public required ApplicationUser User { get; set; }
+        public List<Vote> Votes { get; set; } = new List<Vote>();
+        public Image? Image { get; set; }
     }
 }

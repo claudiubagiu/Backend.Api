@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/posts",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Posts/{id}",
@@ -22,7 +22,7 @@
         }
       ],
       "UpstreamPathTemplate": "/posts/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Posts/Status/{id}",
@@ -34,7 +34,7 @@
         }
       ],
       "UpstreamPathTemplate": "/posts/Status/{id}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": ["PUT"]
     },
     {
       "DownstreamPathTemplate": "/api/Posts",
@@ -46,7 +46,7 @@
         }
       ],
       "UpstreamPathTemplate": "/posts",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Tags",
@@ -58,7 +58,7 @@
         }
       ],
       "UpstreamPathTemplate": "/tags",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Tags/{id}",
@@ -70,7 +70,7 @@
         }
       ],
       "UpstreamPathTemplate": "/tags/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Tags",
@@ -82,9 +82,8 @@
         }
       ],
       "UpstreamPathTemplate": "/tags",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
-
 
     {
       "DownstreamPathTemplate": "/api/Auth/login",
@@ -96,7 +95,7 @@
         }
       ],
       "UpstreamPathTemplate": "/auth/login",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Auth/register",
@@ -108,7 +107,7 @@
         }
       ],
       "UpstreamPathTemplate": "/auth/register",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Images/Upload",
@@ -120,7 +119,7 @@
         }
       ],
       "UpstreamPathTemplate": "/images",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Images",
@@ -132,7 +131,7 @@
         }
       ],
       "UpstreamPathTemplate": "/images",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Images/Comment/{id}",
@@ -144,7 +143,7 @@
         }
       ],
       "UpstreamPathTemplate": "/images/Comment/{id}",
-      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Images/Post/{id}",
@@ -156,7 +155,7 @@
         }
       ],
       "UpstreamPathTemplate": "/images/Post/{id}",
-      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Comments",
@@ -168,7 +167,7 @@
         }
       ],
       "UpstreamPathTemplate": "/comments",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Comments/{id}",
@@ -180,7 +179,7 @@
         }
       ],
       "UpstreamPathTemplate": "/comments/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Comments",
@@ -192,7 +191,7 @@
         }
       ],
       "UpstreamPathTemplate": "/comments",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Comments/Post/{id}",
@@ -204,7 +203,7 @@
         }
       ],
       "UpstreamPathTemplate": "/comments/post/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Notification/send-notification",
@@ -216,7 +215,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Notification/send-notification",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Notification/send-sms",
@@ -228,7 +227,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Notification/send-sms",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Notification/send-email",
@@ -240,7 +239,14 @@
         }
       ],
       "UpstreamPathTemplate": "/Notification/send-email",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Votes/user-vote",
+      "UpstreamPathTemplate": "/votes/user-vote",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [{ "Host": "votes.api", "Port": 5006 }],
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Users",
@@ -252,7 +258,7 @@
         }
       ],
       "UpstreamPathTemplate": "/users",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Users/{id}",
@@ -264,7 +270,7 @@
         }
       ],
       "UpstreamPathTemplate": "/users/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Users/ban",
@@ -276,7 +282,7 @@
         }
       ],
       "UpstreamPathTemplate": "/users/ban",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Users/Score",
@@ -288,7 +294,7 @@
         }
       ],
       "UpstreamPathTemplate": "/users/score",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": ["PUT"]
     },
     {
       "DownstreamPathTemplate": "/api/Users/unban/{id}",
@@ -300,7 +306,7 @@
         }
       ],
       "UpstreamPathTemplate": "/users/unban/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": ["DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Votes",
@@ -312,7 +318,7 @@
         }
       ],
       "UpstreamPathTemplate": "/votes",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Votes/{id}",
@@ -324,7 +330,7 @@
         }
       ],
       "UpstreamPathTemplate": "/votes/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": ["GET", "PUT", "DELETE"]
     },
     {
       "DownstreamPathTemplate": "/api/Votes",
@@ -336,7 +342,7 @@
         }
       ],
       "UpstreamPathTemplate": "/votes",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": ["POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Votes/Post/{id}",
@@ -348,7 +354,7 @@
         }
       ],
       "UpstreamPathTemplate": "/votes/post/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     },
     {
       "DownstreamPathTemplate": "/api/Votes/Comment/{id}",
@@ -360,7 +366,7 @@
         }
       ],
       "UpstreamPathTemplate": "/votes/comments/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": ["GET"]
     }
   ],
   "GlobalConfiguration": {

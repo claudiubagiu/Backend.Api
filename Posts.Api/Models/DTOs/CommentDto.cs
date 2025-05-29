@@ -13,5 +13,9 @@ namespace Posts.Api.Models.DTOs
         public Guid? CommentId { get; set; }
         public required string FeaturedImageUrl { get; set; }
         public ICollection<CommentDto> ChildrenComments { get; set; } = new List<CommentDto>();
+        public required ApplicationUserDto User { get; set; }
+        public Image? Image { get; set; }
+        public List<VoteDto> Votes { get; set; } = new List<VoteDto>();
+        public NrVotes NrVotes { get; set; }
     }
 }

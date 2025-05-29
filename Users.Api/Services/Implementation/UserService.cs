@@ -33,7 +33,7 @@ namespace Users.Api.Services.Implementation
             return mapper.Map<ApplicationUserDto>(user);
         }
 
-        public async Task<int> ModifyScore(ModifyScore modifyScore)
+        public async Task<float> ModifyScore(ModifyScore modifyScore)
         {
             var user = await userRepository.GetByIdAsync(modifyScore.UserId);
             if (user == null)

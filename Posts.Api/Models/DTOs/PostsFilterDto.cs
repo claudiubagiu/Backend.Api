@@ -5,6 +5,7 @@
         public string? Tag { get; set; }
         public string? SearchText { get; set; }
         public string? UserId { get; set; }
+        public string? UserName { get; set; }
         public bool OnlyOwnQuestions { get; set; } = false;
     }
 }

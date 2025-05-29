@@ -21,10 +21,16 @@ namespace Posts.Api.Repositories.Implementation
                 .Include(p => p.Tags)
                 .Include(p => p.Image)
                 .Include(p => p.Comments)
+                    .ThenInclude(c => c.ChildrenComments)
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.Image)
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.Votes)
                 .Include(p => p.User)
                 .Include(p => p.Votes)
                     .ThenInclude(v => v.User)
                 .ToListAsync();
+
         }
 
         public async Task<Post> CreateAsync(Post post)
@@ -35,7 +41,8 @@ namespace Posts.Api.Repositories.Implementation
         }
 
         public async Task<Post?> DeleteAsync(Guid id)
-        {
+        {   
+            dbContext.ChangeTracker.Clear(); 
             var post = await dbContext.Post.FirstOrDefaultAsync(p => p.Id == id);
 
             if (post == null)
